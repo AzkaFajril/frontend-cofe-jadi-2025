@@ -12,7 +12,7 @@ export default function Footer() {
 
   const handleCheckoutClick = () => {
     closeCartModal();
-    navigate('/paymentpage');
+    navigate('/PaymentPage');
   };
 
   return (

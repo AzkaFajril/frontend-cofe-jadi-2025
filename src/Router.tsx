@@ -42,7 +42,7 @@ export default function Router() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/paymentpage" element={<PaymentPage />} />
+        <Route path="/PaymentPage" element={<PaymentPage />} />
       </Route>
       {/* Auth */}
       <Route element={<AuthLayout />}>
