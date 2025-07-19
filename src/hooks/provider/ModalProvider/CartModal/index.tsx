@@ -19,7 +19,7 @@ export default function CartModal({ show, onClose }: CartModalProps) {
   return (
     <BaseModal show={show} onClose={() => {}} fullScreen>
       <div className="flex flex-col h-full bg-white">
-        <div className="flex-shrink-0 bg-white/75 backdrop-blur-sm px-2 py-3 border-b">
+        <div className="flex-shrink-0 bg-white/75 backdrop-blur-sm px-2 py-3 border-b relative">
           <h2 className="text-center text-lg font-semibold text-neutral-800">
             Shopping Cart
           </h2>
@@ -43,7 +43,14 @@ export default function CartModal({ show, onClose }: CartModalProps) {
         
         {itemCount > 0 ? (
           <>
-            <div className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch">
+            <div 
+              className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch"
+              style={{ 
+                height: 'calc(100vh - 120px)', 
+                minHeight: '200px',
+                maxHeight: 'calc(100vh - 120px)'
+              }}
+            >
               <DeliOptionSwitch />
               <OrderItemList />
               <hr className="my-2" />
@@ -54,7 +61,14 @@ export default function CartModal({ show, onClose }: CartModalProps) {
             </div>
           </>
         ) : (
-          <div className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch">
+          <div 
+            className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch"
+            style={{ 
+              height: 'calc(100vh - 120px)', 
+              minHeight: '200px',
+              maxHeight: 'calc(100vh - 120px)'
+            }}
+          >
             <EmptyCart />
           </div>
         )}

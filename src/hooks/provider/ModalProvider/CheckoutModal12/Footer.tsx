@@ -1,15 +1,13 @@
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import ButtonFilled from '@/components/shared/button/ButtonFilled';
 import PriceRow from '@/components/shared/PriceRow';
-import StickyModalFooter from '../StickyModalFooter';
 import { DeliOption } from '@/types';
 import { useUserAddress } from '@/hooks/useUserAddress';
 
-
 interface FooterProps {
   onOrderClick: () => void;
-  
 }
+
 export default function Footer({ onOrderClick }: FooterProps) {
   // Shopping Cart
   const { address } = useUserAddress();
@@ -18,7 +16,7 @@ export default function Footer({ onOrderClick }: FooterProps) {
   const btnDisable = deliOption === DeliOption.DELIVER && !address;
 
   return (
-    <StickyModalFooter>
+    <div>
       <PriceRow lable="Total Payment" amount={totalPayment} />
       <ButtonFilled
         className="w-full mt-2"
@@ -27,6 +25,6 @@ export default function Footer({ onOrderClick }: FooterProps) {
       >
         Order Now
       </ButtonFilled>
-    </StickyModalFooter>
+    </div>
   );
 }
