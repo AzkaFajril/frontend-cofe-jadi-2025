@@ -49,7 +49,7 @@ const Products: React.FC = () => {
   const fetchProducts = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/products', {
+      const response = await fetch('https://serverc.up.railway.app/admin/products', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -73,8 +73,8 @@ const Products: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const url = editingProduct 
-        ? `http://localhost:5000/admin/products/${editingProduct._id}`
-        : 'http://localhost:5000/admin/products';
+        ? `https://serverc.up.railway.app/admin/products/${editingProduct._id}`
+        : 'https://serverc.up.railway.app/admin/products';
       
       const response = await fetch(url, {
         method: editingProduct ? 'PUT' : 'POST',
@@ -118,7 +118,7 @@ const Products: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/admin/products/${productId}`, {
+        const response = await fetch(`https://serverc.up.railway.app/admin/products/${productId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
