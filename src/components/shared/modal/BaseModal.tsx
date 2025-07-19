@@ -22,7 +22,7 @@ export default function BaseModal({
         className={classNames(
           'w-full transform bg-gray-50 transition-all',
           fullScreen
-            ? 'h-screen sm:max-w-md sm:h-[80vh] sm:rounded-3xl overflow-y-auto scrollbar-hide'
+            ? 'h-screen sm:max-w-md sm:h-[80vh] sm:rounded-3xl overflow-hidden'
             : 'max-w-md overflow-hidden rounded-3xl mx-2'
         )}
       >
