@@ -36,7 +36,7 @@ const PickupOrder: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('https://serverc.up.railway.app/api/orders', {
+      const response = await fetch('http://localhost:5000/api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -68,7 +68,7 @@ const PickupOrder: React.FC = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://serverc.up.railway.app/admin/orders/${order._id}/status`, {
+      const response = await fetch(`http://localhost:5000/admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

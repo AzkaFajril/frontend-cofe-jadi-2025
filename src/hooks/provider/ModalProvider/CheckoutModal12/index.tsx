@@ -120,7 +120,7 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
     // HAPUS field id jika ada! (tidak perlu, karena id tidak selalu ada)
     try {
       console.log("Order data:", orderData);
-      const res = await fetch('https://serverc.up.railway.app/api/orders', {
+      const res = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),

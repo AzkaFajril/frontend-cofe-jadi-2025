@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsAndConditions from './pages/TermsAndConditions';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 // Admin components
 import AdminRoute from './components/admin/AdminRoute';
 import DashboardLayout from './components/admin/DashboardLayout';
@@ -43,6 +44,7 @@ export default function Router() {
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/PaymentPage" element={<PaymentPage />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
       </Route>
       {/* Auth */}
       <Route element={<AuthLayout />}>

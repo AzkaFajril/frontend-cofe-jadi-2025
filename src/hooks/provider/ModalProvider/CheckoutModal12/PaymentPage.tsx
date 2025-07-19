@@ -17,7 +17,7 @@ const PAYMENT_METHODS = [
   { value: 'cod', label: 'Cash on Delivery (COD)' },
 ];
 
-const API_URL = 'https://serverc.up.railway.app';
+const API_URL = 'http://localhost:5000';
 
 const ORDER_TYPE_LABELS: Record<string, string> = {
   'in-place': 'In Place',
@@ -26,7 +26,7 @@ const ORDER_TYPE_LABELS: Record<string, string> = {
 };
 
 const fetchProducts = async () => {
-  const res = await fetch('https://serverc.up.railway.app/products');
+  const res = await fetch('http://localhost:5000/products');
   return res.json();
 };
 
@@ -49,7 +49,7 @@ export default function PaymentPage() {
   // Update mappedItems setiap items berubah
   useEffect(() => {
     const fetchAndMap = async () => {
-      const res = await fetch('https://serverc.up.railway.app/products');
+      const res = await fetch('http://localhost:5000/products');
       const allProducts = await res.json();
       const mapped = items.map(item => {
         // Cocokkan id produk baik id maupun _id, toleran tipe
@@ -274,6 +274,7 @@ export default function PaymentPage() {
     }
     // 2. Minta token Snap pakai orderId dari backend
     try {
+      const userEmail = localStorage.getItem('userEmail'); // Ambil email user dari localStorage
       const res = await fetch(`${API_URL}/api/payment/midtrans-token`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -282,8 +283,9 @@ export default function PaymentPage() {
           grossAmount: totalPayment,
           customer: {
             name: userId,
-            email: userId + '@example.com',
+            email: userEmail, // gunakan email user asli
           },
+          finish_redirect_url: 'https://cofeshopbandung.netlify.app/payment-success', // tambahkan ini
         }),
       });
       const data = await res.json();
