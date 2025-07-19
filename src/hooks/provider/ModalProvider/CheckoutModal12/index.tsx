@@ -11,8 +11,6 @@ import DeliveryAddress from './DeliveryAddress';
 import PaymentMethodSwitch from './PaymentMethodSwitch';
 import OrderSummary from './OrderSummary';
 import StickyModalHeader from '../StickyModalHeader';
-import FlexContainer from '../FlexContainer';
-import FullHeightContainer from '../FullHeightContainer';
 import { fakeTimer } from '@/utils/helper';
 import { useModal } from '@/hooks/useModal';
 import { TAddOrder, addOrder } from '@/service/order';
@@ -69,8 +67,8 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
     const orderItems: OrderItem[] = cartItems?.map((ci) => {
       let price = ci.product.price;
       // Jika produk punya variasi size, ambil harga sesuai size
-      if (ci.product.sizes && ci.size) {
-        const sizeObj = ci.product.sizes.find(s => s.name?.toLowerCase() === ci.size?.toLowerCase());
+      if ((ci.product as any).sizes && ci.size) {
+        const sizeObj = (ci.product as any).sizes.find((s: any) => s.name?.toLowerCase() === ci.size?.toLowerCase());
         if (sizeObj) price = sizeObj.price;
       }
       return {
@@ -117,7 +115,9 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
       orderType: deliOption === DeliOption.IN_PLACE ? 'IN_PLACE' : deliOption === DeliOption.PICK_UP ? 'PICK_UP' : 'DELIVER',
     };
     // HAPUS field id jika ada!
-    delete orderData.id;
+    if ('id' in orderData) {
+      delete (orderData as any).id;
+    }
     try {
       console.log("Order data:", orderData);
       const res = await fetch('https://sekola-backend-production-bd7d.up.railway.app/api/orders', {
@@ -160,9 +160,9 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
   return (
     <>
       <BaseModal show={show} onClose={() => {}} fullScreen>
-        <FlexContainer>
+        <div className="flex flex-col h-full">
           <StickyModalHeader title="Checkout Order" onClose={onClose} />
-          <FullHeightContainer>
+          <div className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch">
             {deliOption === DeliOption.DELIVER ? (
               <DeliveryAddress />
             ) : deliOption === DeliOption.IN_PLACE ? (
@@ -174,9 +174,9 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
             <PaymentMethodSwitch />
             <hr className="my-4" />
             <OrderSummary />
-          </FullHeightContainer>
+          </div>
           <Footer onOrderClick={handleOrderClick} />
-        </FlexContainer>
+        </div>
         <PageLoading show={loading} />
       </BaseModal>
       <ConfirmDialog
