@@ -6,8 +6,6 @@ import PaymentSummary from './PaymentSummary';
 import OrderItemList from './OrderItemList';
 import EmptyCart from './EmptyCart';
 import StickyModalHeader from '../StickyModalHeader';
-import FullHeightContainer from '../FullHeightContainer';
-import FlexContainer from '../FlexContainer';
 
 interface CartModalProps {
   show: boolean;
@@ -20,22 +18,24 @@ export default function CartModal({ show, onClose }: CartModalProps) {
 
   return (
     <BaseModal show={show} onClose={() => {}} fullScreen>
-      <FlexContainer>
+      <div className="flex flex-col h-full">
         <StickyModalHeader title="Shopping Cart" onClose={onClose} />
         {itemCount > 0 ? (
           <>
-            <FullHeightContainer>
+            <div className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch">
               <DeliOptionSwitch />
               <OrderItemList />
               <hr className="my-2" />
               <PaymentSummary />
-            </FullHeightContainer>
+            </div>
             <Footer />
           </>
         ) : (
-          <EmptyCart />
+          <div className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch">
+            <EmptyCart />
+          </div>
         )}
-      </FlexContainer>
+      </div>
     </BaseModal>
   );
 }
