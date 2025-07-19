@@ -19,5 +19,12 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-ULXz5xgPe9Y2JZj-"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+  google.accounts.id.initialize({
+    client_id: "756275400281-5cllputqbgk7j3kqjknki17uqj67bp6e.apps.googleusercontent.com", // <-- EDIT DI SINI
+    callback: handleCredentialResponse
+  });
+</script>
   </body>
 </html>
