@@ -2,7 +2,7 @@ import { CoffeeSize, DeliOption, LatLng, PaymentMethod } from '@/types';
 
 export const APP_NAME = "Coffee Shop";
 
-export const GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID;
+export const GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID || '756275400281-5cllputqbgk7j3kqjknki17uqj67bp6e.apps.googleusercontent.com';
 
 export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
