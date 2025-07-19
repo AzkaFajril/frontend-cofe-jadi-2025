@@ -20,7 +20,8 @@ export default function OrderItemList() {
               index !== itemCount - 1 ? 'border-b border-primary-200' : ''
             )}
           >
-            <CartItemCard cartItem={cartItem} index={index} />
+                        <CartItemCard cartItem={cartItem} index={index} />
+
           </li>
         ))}
       </ul>

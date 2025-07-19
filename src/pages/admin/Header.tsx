@@ -14,7 +14,7 @@ const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const response = await fetch('https://sekola-backend-production-bd7d.up.railway.app/auth/me', {
+      const response = await fetch('http://localhost:5000/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {

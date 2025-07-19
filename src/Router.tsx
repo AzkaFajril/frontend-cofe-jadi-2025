@@ -24,6 +24,7 @@ import UploadMenu from './components/admin/uplloadmenu';
 import PrintQRTable from './hooks/provider/ModalProvider/CheckoutModal12/PrintQRTable';
 import BuyPage from './hooks/provider/beli/BuyPage';
 import InPlaceOrders from './pages/admin/InPlaceOrders';
+import PaymentPage from './hooks/provider/ModalProvider/CheckoutModal12/PaymentPage';
 
 export default function Router() {
   return (
@@ -39,6 +40,7 @@ export default function Router() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/PaymentPage" element={<PaymentPage />} />
       </Route>
       {/* Auth */}
       <Route element={<AuthLayout />}>

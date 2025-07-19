@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/payment': 'https://sekola-backend-production-bd7d.up.railway.app'
+      '/payment': 'http://localhost:5000'
     }
   }
 })

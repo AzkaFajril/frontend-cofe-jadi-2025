@@ -4,11 +4,19 @@ import { Link } from 'react-router-dom';
 
 interface OrderCardProps {
   order: DeliveryOrder;
+  products: any[];
 }
 
-export default function OrderCard({ order }: OrderCardProps) {
+export default function OrderCard({ order, products }: OrderCardProps) {
 
   const orderItemsText = order?.items?.map((i)=>`${i.quantity}x ${i.productName}`)?.join(", ");
+  // Ambil image dari produk berdasarkan productId item pertama
+  let image = order.image;
+  if (order.items && order.items.length > 0) {
+    const firstProductId = order.items[0]?.productId;
+    const product = products.find(p => p.id === firstProductId || p._id === firstProductId);
+    image = product?.image || order.image;
+  }
   return (
     <Link
       to={`/orders/${order._id}`}
@@ -16,7 +24,7 @@ export default function OrderCard({ order }: OrderCardProps) {
     >
       <div className="w-16 h-16 bg-gray-300 rounded-lg overflow-hidden">
         <img
-          src={order.image}
+          src={image}
           className="w-full h-full object-cover"
         />
       </div>

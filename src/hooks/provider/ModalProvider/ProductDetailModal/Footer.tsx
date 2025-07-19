@@ -23,7 +23,10 @@ export default function Footer({ product, onClose, selectedSize }: ProductDetail
   };
 
   const handelAddToCart = () => {
-    addToCart(product, quantity, selectedSize);
+    addToCart({
+      ...product,
+      id: product.id || product._id, // pastikan id selalu ada
+    }, quantity, selectedSize);
     onClose();
   };
 

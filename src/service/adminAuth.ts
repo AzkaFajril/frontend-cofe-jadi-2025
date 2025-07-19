@@ -10,7 +10,7 @@ class AdminAuth {
 
   async verifyToken(): Promise<boolean> {
     const token = this.getToken();
-    const res = await fetch('https://sekola-backend-production-bd7d.up.railway.app/admin/verify', {
+    const res = await fetch('http://localhost:5000/admin/verify', {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (!res.ok) return false;

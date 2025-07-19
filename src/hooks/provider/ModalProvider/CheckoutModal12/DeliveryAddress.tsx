@@ -4,6 +4,7 @@ import { useModal } from '@/hooks/useModal';
 import Title6 from '@/components/shared/typo/Title6';
 import MapNonInteractive from '@/components/shared/MapNonInteractive';
 import AddressCard from '@/components/shared/AddressCard';
+import FullHeightContainer from '../FullHeightContainer';
 
 export default function DeliveryAddress() {
   // Address
@@ -12,6 +13,7 @@ export default function DeliveryAddress() {
   const { showAddressModal } = useModal();
 
   return (
+    <FullHeightContainer>
     <div>
       <Title6 className="mb-3">Delivery Address</Title6>
       {address?.fullAddress ? (
@@ -45,5 +47,6 @@ export default function DeliveryAddress() {
         </AddressCard>
       )}
     </div>
+    </FullHeightContainer>
   );
 }

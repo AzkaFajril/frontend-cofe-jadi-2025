@@ -34,12 +34,30 @@ const ShoppingCartProvider: React.FC<ShoppingCartProviderProps> = ({
   const totalPayment = subTotal + deliFee;
 
   const addToCart = (product: CoffeeProduct, quantity: number, size: string) => {
-    const newItem: CartItem = {
-      product,
-      quantity,
-      size,
-    };
-    setItems((prevCart) => [...prevCart, newItem]);
+    setItems((prevCart) => {
+      // Cek apakah sudah ada item dengan id dan size yang sama
+      const existingIndex = prevCart.findIndex(
+        (item) => item.product.id === product.id && item.size === size
+      );
+      if (existingIndex !== -1) {
+        // Jika sudah ada, update quantity
+        return prevCart.map((item, i) =>
+          i === existingIndex
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
+      } else {
+        // Jika belum ada, tambahkan item baru
+        return [
+          ...prevCart,
+          {
+            product,
+            quantity,
+            size,
+          },
+        ];
+      }
+    });
   };
 
   const updateQuantity = (index: number, newQuantity: number) => {

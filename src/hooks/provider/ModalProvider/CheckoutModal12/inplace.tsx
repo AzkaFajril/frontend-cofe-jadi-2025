@@ -4,6 +4,7 @@ import QrDecoder from 'qrcode-decoder';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import ButtonFilled from '@/components/shared/button/ButtonFilled';
 import { v4 as uuidv4 } from 'uuid';
+import FullHeightContainer from '../FullHeightContainer';
 
 interface ScanTableQRProps {
   tableNumber: string;
@@ -65,7 +66,7 @@ export default function ScanTableQR({ tableNumber, setTableNumber }: ScanTableQR
       image: items[0]?.product?.image || '',
     };
     try {
-      const res = await fetch('https://sekola-backend-production-bd7d.up.railway.app/api/orders', {
+      const res = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
@@ -84,6 +85,7 @@ export default function ScanTableQR({ tableNumber, setTableNumber }: ScanTableQR
   };
 
   return (
+    <FullHeightContainer>
     <div className="flex flex-col items-center">
       <h2 className="mb-2">Scan QR Nomor Meja</h2>
       <p className="mb-2 text-gray-600 text-sm">
@@ -110,5 +112,6 @@ export default function ScanTableQR({ tableNumber, setTableNumber }: ScanTableQR
         {tableNumber && <>Nomor Meja: {tableNumber}</>}
       </div>
     </div>
+    </FullHeightContainer>
   );
 }

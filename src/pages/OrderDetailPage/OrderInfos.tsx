@@ -14,17 +14,22 @@ export default function OrderInfos({ order }: OrderInfosProps) {
     <div className="mt-4">
       <LabelValueRow lable="Order ID" value={`#${order.orderId}`} />
       <LabelValueRow lable="Order Date" value={order.date} />
-      {order.deliOption === DeliOption.DELIVER ? (
-        <LabelValueRow lable="Delivery Address" value={order.customer?.address || '-'} />
-      ) : order.deliOption === DeliOption.IN_PLACE ? (
+      <LabelValueRow lable="Delivery Type" value={(order as any).deliveryType || order.orderType || order.deliOption || '-'} />
+
+      {/* Tampilkan alamat jika delivery */}
+      {['DELIVER', 'DELIVERY', 'delivery', 'deliver'].includes(order.orderType || order.deliOption) ? (
+        <LabelValueRow lable="Delivery Address" value={(order as any).address || order.customer?.address || '-'} />
+      ) : ['IN_PLACE', 'in-place'].includes(order.orderType || order.deliOption) ? (
         <>
-          <LabelValueRow lable="Delivery Type" value="in place" />
-          {order.tableNumber && (
-            <LabelValueRow lable="Table Number" value={order.tableNumber} />
-          )}
+          <LabelValueRow lable="Delivery Type" value="In Place" />
         </>
       ) : (
-        <LabelValueRow lable="Delivery Type" value="Self Pick-up" />
+        // Tampilkan Table Number jika in-place
+        ['in_place', 'in-place'].includes((order.orderType || order.deliOption)?.toLowerCase?.()) && !!order.tableNumber && (
+          <div className="mt-1">
+            <b>Table Number</b>: <span className="text-primary-700 float-right">{order.tableNumber}</span>
+          </div>
+        )
       )}
       <LabelValueRow lable="Total Payment" value={formatRupiahTanpaDesimal(order.totalPayment)} />
     </div>

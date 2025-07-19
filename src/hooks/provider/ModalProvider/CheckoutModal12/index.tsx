@@ -11,6 +11,8 @@ import DeliveryAddress from './DeliveryAddress';
 import PaymentMethodSwitch from './PaymentMethodSwitch';
 import OrderSummary from './OrderSummary';
 import StickyModalHeader from '../StickyModalHeader';
+import FlexContainer from '../FlexContainer';
+import FullHeightContainer from '../FullHeightContainer';
 import { fakeTimer } from '@/utils/helper';
 import { useModal } from '@/hooks/useModal';
 import { TAddOrder, addOrder } from '@/service/order';
@@ -67,8 +69,9 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
     const orderItems: OrderItem[] = cartItems?.map((ci) => {
       let price = ci.product.price;
       // Jika produk punya variasi size, ambil harga sesuai size
-      if ((ci.product as any).sizes && ci.size) {
-        const sizeObj = (ci.product as any).sizes.find((s: any) => s.name?.toLowerCase() === ci.size?.toLowerCase());
+      const sizes = (ci.product as any).sizes;
+      if (sizes && ci.size) {
+        const sizeObj = sizes.find((s: any) => s.name?.toLowerCase() === ci.size?.toLowerCase());
         if (sizeObj) price = sizeObj.price;
       }
       return {
@@ -114,13 +117,10 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
       image: cartItems[0]?.product?.image || '',
       orderType: deliOption === DeliOption.IN_PLACE ? 'IN_PLACE' : deliOption === DeliOption.PICK_UP ? 'PICK_UP' : 'DELIVER',
     };
-    // HAPUS field id jika ada!
-    if ('id' in orderData) {
-      delete (orderData as any).id;
-    }
+    // HAPUS field id jika ada! (tidak perlu, karena id tidak selalu ada)
     try {
       console.log("Order data:", orderData);
-      const res = await fetch('https://sekola-backend-production-bd7d.up.railway.app/api/orders', {
+      const res = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
@@ -158,39 +158,11 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
   };
 
   return (
-    <>
       <BaseModal show={show} onClose={() => {}} fullScreen>
-        <div className="flex flex-col h-full bg-white" style={{ height: '100vh', paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-          <div className="flex-shrink-0 bg-white/75 backdrop-blur-sm px-2 py-3 border-b relative">
-            <h2 className="text-center text-lg font-semibold text-neutral-800">
-              Checkout Order
-            </h2>
-            <button
-              onClick={onClose}
-              className="block sm:hidden absolute top-3.5 left-3 text-gray-500 hover:text-gray-700"
-            >
-              <svg className="w-6 h-6 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-            <button
-              onClick={onClose}
-              className="hidden sm:block absolute top-3.5 right-3 text-gray-500 hover:text-gray-700"
-            >
-              <svg className="w-6 h-6 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          
-          <div 
-            className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch"
-            style={{ 
-              height: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))', 
-              minHeight: '200px',
-              maxHeight: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
-            }}
-          >
+      <FlexContainer>
+        <StickyModalHeader title="Checkout Order" onClose={onClose} />
+        {/* AREA YANG BISA DI-SCROLL */}
+        <FullHeightContainer>
             {deliOption === DeliOption.DELIVER ? (
               <DeliveryAddress />
             ) : deliOption === DeliOption.IN_PLACE ? (
@@ -202,14 +174,11 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
             <PaymentMethodSwitch />
             <hr className="my-4" />
             <OrderSummary />
-          </div>
-          
-          <div className="flex-shrink-0 bg-white/75 backdrop-blur-sm border-t p-3">
+        </FullHeightContainer>
+        {/* FOOTER DI LUAR AREA SCROLL */}
             <Footer onOrderClick={handleOrderClick} />
-          </div>
-        </div>
+      </FlexContainer>
         <PageLoading show={loading} />
-      </BaseModal>
       <ConfirmDialog
         show={showLoginCD}
         title="Account Required"
@@ -229,6 +198,6 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
           To proceed with this action, please add your address to deliver orders.
         </ConfirmDialog>
       )}
-    </>
+    </BaseModal>
   );
 }

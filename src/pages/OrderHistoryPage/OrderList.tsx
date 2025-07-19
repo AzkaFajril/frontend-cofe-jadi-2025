@@ -4,7 +4,7 @@ import OrderCard from './OrderCard';
 import useOrders from './useOrders';
 import EmptyOrder from './EmptyOrder';
 
-export default function OrderList() {
+export default function OrderList({ products = [] }: { products: any[] }) {
   const { data, isLoading } = useOrders();
   const orderCount = data.length;
 
@@ -24,7 +24,7 @@ export default function OrderList() {
                       : ''
                   )}
                 >
-                  <OrderCard order={order} />
+                  <OrderCard order={order} products={products} />
                 </li>
               ))}
             </ul>

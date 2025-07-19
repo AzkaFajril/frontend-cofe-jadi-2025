@@ -3,5 +3,5 @@ interface FullHeightContainerProps {
 }
 
 export default function FullHeightContainer({ children }: FullHeightContainerProps) {
-  return <div className="flex-1 p-4 overflow-y-auto max-h-full">{children}</div>;
+  return <div className="flex-1 min-h-0 overflow-y-auto ...">{children}</div>;
 }

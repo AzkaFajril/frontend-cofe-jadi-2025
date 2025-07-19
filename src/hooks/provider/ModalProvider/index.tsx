@@ -74,9 +74,11 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   );
 
   return (
+    
     <ModalContext.Provider value={value}>
       {children}
       <ProductDetailModal product={product} onClose={closeProductModal} />
+      {/* CartModal selalu di-render, tidak tergantung route */}
       <CartModal show={showCart} onClose={closeCartModal} />
       <CheckoutModal show={showCheckout} onClose={closeCheckoutModal} />
       <AddressModal show={showAddress} onClose={closeAddressModal} />

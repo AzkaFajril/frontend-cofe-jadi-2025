@@ -71,6 +71,7 @@ export interface OrderItem {
   productName: string;
   quantity: number;
   price: number;
+  size?: string; // Tambahan agar bisa tampilkan size
 }
 
 export interface DeliveryOrder {
