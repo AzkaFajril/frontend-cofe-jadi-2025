@@ -4,7 +4,7 @@ export const APP_NAME = "Coffee Shop";
 
 export const GOOGLE_OAUTH_CLIENT_ID = import.meta.env.VITE_GOOGLE_OAUTH_CLIENT_ID || '756275400281-5cllputqbgk7j3kqjknki17uqj67bp6e.apps.googleusercontent.com';
 
-export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+export const MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjbGV4YW1wbGUifQ.example';
 
 export const defaultCoordinate: LatLng = {
   lng: 96.17045650343823,
