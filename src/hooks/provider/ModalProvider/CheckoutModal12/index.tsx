@@ -120,7 +120,7 @@ export default function CheckoutModal({ show, onClose }: CheckoutModalProps) {
     delete orderData.id;
     try {
       console.log("Order data:", orderData);
-      const res = await fetch('http://localhost:5000/api/orders', {
+      const res = await fetch('https://sekola-backend-production-bd7d.up.railway.app/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),

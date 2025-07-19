@@ -14,7 +14,7 @@ const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
     const fetchUser = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const response = await fetch('http://localhost:5000/auth/me', {
+      const response = await fetch('https://sekola-backend-production-bd7d.up.railway.app/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -26,7 +26,7 @@ const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
   }, []);
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 border-solida">
+    <header className="bg-white shadow-sm border-b border-gray-200 border-solid border-solida">
       <div className="flex items-center justify-between h-16 px-6">
         {/* Mobile menu button */}
         <button
@@ -42,7 +42,7 @@ const Header: React.FC<{ onMenuClick: () => void }> = ({ onMenuClick }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 border-solid rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

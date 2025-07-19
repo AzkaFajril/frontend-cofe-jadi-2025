@@ -18,7 +18,7 @@ const InPlaceOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders/inplace', {
+      const response = await fetch('https://sekola-backend-production-bd7d.up.railway.app/api/orders/inplace', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -37,7 +37,7 @@ const InPlaceOrders: React.FC = () => {
   const handleConfirm = async (orderId: string, status: 'completed' | 'cancelled') => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/orders/${orderId}/status`, {
+      const response = await fetch(`https://sekola-backend-production-bd7d.up.railway.app/admin/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

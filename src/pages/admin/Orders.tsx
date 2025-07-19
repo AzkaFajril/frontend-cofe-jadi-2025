@@ -36,7 +36,7 @@ const Orders: React.FC = () => {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/payments', {
+      const response = await fetch('https://sekola-backend-production-bd7d.up.railway.app/admin/payments', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ const Orders: React.FC = () => {
   const handleStatusUpdate = async (orderId: string, newStatus: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/orders/${orderId}/status`, {
+      const response = await fetch(`https://sekola-backend-production-bd7d.up.railway.app/admin/orders/${orderId}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -177,7 +177,7 @@ const Orders: React.FC = () => {
 
       {/* Orders Table */}
       <div className="bg-white rounded-lg shadow-md">
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 border-solid">
           <h3 className="text-lg font-semibold text-gray-900">All Orders</h3>
         </div>
         
