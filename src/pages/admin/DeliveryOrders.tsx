@@ -7,6 +7,16 @@ const statusColors: Record<string, string> = {
   cancelled: 'bg-red-100 text-red-800',
 };
 
+const paymentLabels: Record<string, string> = {
+  dana: 'OnlinePayment',
+  gopay: 'OnlinePayment',
+  shopeepay: 'OnlinePayment',
+  credit_card: 'OnlinePayment',
+  bank_transfer: 'OnlinePayment',
+  midtrans: 'OnlinePayment',
+  cod: 'COD',
+};
+
 const statusTips: Record<string, string> = {
   pending: 'Belum payment',
   processing: 'Sudah payment',
@@ -14,10 +24,10 @@ const statusTips: Record<string, string> = {
   cancelled: 'Order dibatalkan',
 };
 
-const InPlaceOrders: React.FC = () => {
+const DeliveryOrders: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'processing' | 'completed' | 'cancelled'>('pending');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'processing' | 'completed' | 'cancelled'>('processing');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'online' | 'cod'>('all');
 
   useEffect(() => {
@@ -33,7 +43,7 @@ const InPlaceOrders: React.FC = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        setOrders(data);
+        setOrders(data); // Data sudah delivery dari backend
       }
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -54,9 +64,27 @@ const InPlaceOrders: React.FC = () => {
         else if (order.status === 'pending') newStatus = 'cancelled';
       }
     } else {
-      // Untuk non-COD, tetap seperti biasa
       newStatus = action === 'next' ? 'completed' : 'cancelled';
     }
+    const fetchOrders = async () => {
+      try {
+        // Ganti base URL sesuai kebutuhan (bisa pakai proxy di vite.config.js)
+        const response = await fetch('https://serverc.up.railway.app/api/orders', {
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Filter hanya order delivery
+          setOrders(data.filter((order: any) =>
+            (order.deliveryType || order.orderType || order.deliOption || '').toLowerCase() === 'delivery'
+          ));
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     try {
       const token = localStorage.getItem('token');
@@ -91,7 +119,7 @@ const InPlaceOrders: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">In-Place Orders</h1>
+      <h1 className="text-3xl font-bold text-gray-900 mb-8">Delivery Orders</h1>
       <div className="mb-6 p-4 rounded-lg border border-yellow-400 border-solid bg-yellow-50 flex flex-col gap-1 shadow-sm max-w-xl">
         <div className="flex items-center gap-2">
           <span className="w-5 h-5 bg-yellow-400 text-black rounded-full flex items-center justify-center text-sm font-bold">!</span>
@@ -116,6 +144,19 @@ const InPlaceOrders: React.FC = () => {
       </div>
       <div className="mb-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
+          <label className="font-medium">Filter Status:</label>
+          <select
+            value={statusFilter}
+            onChange={e => setStatusFilter(e.target.value as any)}
+            className="border px-2 py-1 rounded"
+          >
+            <option value="all">All</option>
+            <option value="processing">Processing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div className="flex items-center gap-2">
           <label className="font-medium">Filter Payment:</label>
           <select
             value={paymentFilter}
@@ -127,27 +168,15 @@ const InPlaceOrders: React.FC = () => {
             <option value="cod">COD</option>
           </select>
         </div>
-        <div className="flex items-center gap-2">
-        <label className="font-medium">Filter Status:</label>
-        <select
-          value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value as any)}
-          className="border px-2 py-1 rounded"
-        >
-          <option value="all">All</option>
-          <option value="pending">Pending</option>
-          <option value="processing">Processing</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-        </div>
       </div>
       <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gradient-to-r from-blue-50 to-green-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Order ID</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Table Number</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Customer</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Phone</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Address</th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Items</th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Total</th>
               <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Status</th>
@@ -157,6 +186,9 @@ const InPlaceOrders: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {orders
+              .filter(order =>
+                (order.deliveryType || order.orderType || order.deliOption || '').toLowerCase() === 'delivery'
+              )
               .filter(order =>
                 statusFilter === 'all' ? true : order.status === statusFilter
               )
@@ -180,7 +212,15 @@ const InPlaceOrders: React.FC = () => {
                   #{order.orderId || order._id?.slice(-6)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                  {order.tableNumber || '-'}
+                  {/* Customer Name */}
+                  {order.customer?.name || '-'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  {/* Customer Phone */}
+                  {order.customer?.phone || '-'}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  {order.address || order.customer?.address || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                   <ul className="space-y-1">
@@ -217,9 +257,7 @@ const InPlaceOrders: React.FC = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-gray-700">
-                  {['dana','gopay','shopeepay','credit_card','bank_transfer','midtrans'].includes((order.paymentMethod || '').toLowerCase())
-                    ? 'OnlinePayment'
-                    : (order.paymentMethod?.toUpperCase() || '-')}
+                  {paymentLabels[(order.paymentMethod || '').toLowerCase()] || (order.paymentMethod?.toUpperCase() || '-')}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap flex gap-2">
                   <button
@@ -251,4 +289,4 @@ const InPlaceOrders: React.FC = () => {
   );
 };
 
-export default InPlaceOrders;
+export default DeliveryOrders; 

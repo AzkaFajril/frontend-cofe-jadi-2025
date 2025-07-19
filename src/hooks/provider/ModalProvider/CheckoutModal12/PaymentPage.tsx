@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+    import React, { useState, useEffect } from 'react';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import ButtonFilled from '@/components/shared/button/ButtonFilled';
 import Title2 from '@/components/shared/typo/Title2';
@@ -13,12 +13,11 @@ const ORDER_TYPES = [
 ];
 
 const PAYMENT_METHODS = [
-  { value: 'cash', label: 'Cash' },
-  { value: 'qr', label: 'QR Code' },
-  { value: 'card', label: 'Credit/Debit Card' },
+  { value: 'midtrans', label: 'Midtrans (E-Wallet/VA)' },
+  { value: 'cod', label: 'Cash on Delivery (COD)' },
 ];
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://serverc.up.railway.app';
 
 const ORDER_TYPE_LABELS: Record<string, string> = {
   'in-place': 'In Place',
@@ -27,14 +26,14 @@ const ORDER_TYPE_LABELS: Record<string, string> = {
 };
 
 const fetchProducts = async () => {
-  const res = await fetch('http://localhost:5000/products');
+  const res = await fetch('https://serverc.up.railway.app/products');
   return res.json();
 };
 
 export default function PaymentPage() {
   const { items, totalPayment, clearCart } = useShoppingCart();
   const [orderType, setOrderType] = useState('in-place');
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentMethod, setPaymentMethod] = useState('midtrans');
   const [address, setAddress] = useState('');
   const [editingAddress, setEditingAddress] = useState(false);
   const [addressLoading, setAddressLoading] = useState(false);
@@ -44,11 +43,13 @@ export default function PaymentPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [mappedItems, setMappedItems] = useState<any[]>([]);
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
 
   // Update mappedItems setiap items berubah
   useEffect(() => {
     const fetchAndMap = async () => {
-      const res = await fetch('http://localhost:5000/products');
+      const res = await fetch('https://serverc.up.railway.app/products');
       const allProducts = await res.json();
       const mapped = items.map(item => {
         // Cocokkan id produk baik id maupun _id, toleran tipe
@@ -169,6 +170,143 @@ export default function PaymentPage() {
     setAddressLoading(false);
   };
 
+  const handlePay = async () => {
+    setLoading(true);
+    setError(null);
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      setError('Anda harus login terlebih dahulu!');
+      setLoading(false);
+      return;
+    }
+    if (orderType === 'in-place' && !tableNumber.trim()) {
+      setError('Nomor meja wajib diisi untuk in place!');
+      setLoading(false);
+      return;
+    }
+    if (orderType === 'delivery') {
+      if (!customerName.trim()) {
+        setError('Nama penerima wajib diisi untuk delivery!');
+        setLoading(false);
+        return;
+      }
+      if (!customerPhone.trim()) {
+        setError('Nomor telepon wajib diisi untuk delivery!');
+        setLoading(false);
+        return;
+      }
+    }
+    const allProducts = await fetchProducts();
+    const mappedItems = items.map((item: any) => {
+      const product = allProducts.find((p: any) => p.id == item.product.id || p._id == item.product.id);
+      let price = product?.price;
+      if (product?.sizes && item.size) {
+        const sizeObj = product.sizes.find((s: any) => s.name.toLowerCase() === item.size.toLowerCase());
+        price = sizeObj ? sizeObj.price : product.price;
+      }
+      return {
+        productId: item.product.id,
+        productName: item.product.displayName,
+        size: item.size,
+        quantity: item.quantity,
+        price: price ?? 0,
+        image: product?.image,
+      };
+    });
+    const totalPayment = mappedItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const orderData = {
+      userId,
+      items: mappedItems,
+      totalPayment,
+      paymentMethod,
+      orderType: orderType.toUpperCase(),
+      address: orderType === 'delivery' ? address : undefined,
+      tableNumber: orderType === 'in-place' ? tableNumber : undefined,
+      date: new Date().toLocaleString('en-US'),
+      customer: orderType === 'delivery' ? { name: customerName, phone: customerPhone, address } : undefined,
+    };
+    // Update user profile dengan nama dan nomor telepon jika userId ada
+    if (orderType === 'delivery' && userId) {
+      try {
+        await fetch(`${API_URL}/api/auth/update-profile`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, name: customerName, phone: customerPhone }),
+        });
+      } catch (e) { /* ignore error */ }
+    }
+    if (paymentMethod === 'cod') {
+      // Simpan order langsung tanpa Snap
+      try {
+        const res = await fetch(`${API_URL}/api/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData),
+        });
+        if (res.ok) {
+          setSuccess(true);
+          clearCart();
+        } else {
+          const err = await res.json();
+          setError(err.message || 'Gagal menyimpan order!');
+        }
+      } catch (err) {
+        setError('Gagal menyimpan order!');
+      }
+      setLoading(false);
+      return;
+    }
+    // 1. Simpan order ke backend (selalu, status pending)
+    let orderId = '';
+    try {
+      const res = await fetch(`${API_URL}/api/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+      const data = await res.json();
+      if (!data.success || !data.order) throw new Error('Gagal membuat order');
+      orderId = data.order.orderId;
+    } catch (err) {
+      setError('Gagal membuat order!');
+      setLoading(false);
+      return;
+    }
+    // 2. Minta token Snap pakai orderId dari backend
+    try {
+      const res = await fetch(`${API_URL}/api/payment/midtrans-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          grossAmount: totalPayment,
+          customer: {
+            name: userId,
+            email: userId + '@example.com',
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!data.token) throw new Error('Gagal mendapatkan token Midtrans');
+      // @ts-ignore
+      window.snap.pay(data.token, {
+        onSuccess: () => {
+          clearCart();
+          window.location.href = '/orders';
+        },
+        onPending: () => {
+          clearCart();
+          window.location.href = '/orders';
+        },
+        onError: () => setError('Pembayaran gagal!'),
+        onClose: () => setError('Kamu menutup popup tanpa menyelesaikan pembayaran'),
+      });
+    } catch (err) {
+      setError('Terjadi error saat pembayaran');
+    }
+    setLoading(false);
+  };
+
   if (success) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
@@ -269,21 +407,45 @@ export default function PaymentPage() {
             )}
           </div>
         )}
-        {/* Pilihan Metode Pembayaran */}
+        {/* Input Nama dan Nomor Telepon jika Delivery */}
+        {orderType === 'delivery' && (
+          <>
+            <div className="mb-6">
+              <Title3 className="mb-2">Nama Penerima</Title3>
+              <input
+                type="text"
+                className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Masukkan nama penerima"
+                value={customerName}
+                onChange={e => setCustomerName(e.target.value)}
+              />
+            </div>
+            <div className="mb-6">
+              <Title3 className="mb-2">Nomor Telepon</Title3>
+              <input
+                type="text"
+                className="w-full border rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Masukkan nomor telepon"
+                value={customerPhone}
+                onChange={e => setCustomerPhone(e.target.value)}
+              />
+            </div>
+          </>
+        )}
+        {/* Dropdown Metode Pembayaran */}
         <div className="mb-6">
-          <Title3 className="mb-2">Metode Pembayaran</Title3>
-          <div className="flex gap-2 flex-wrap">
-            {PAYMENT_METHODS.map((pm) => (
-              <button
-                key={pm.value}
-                className={`px-4 py-2 rounded-lg border font-medium transition-colors ${paymentMethod === pm.value ? 'bg-blue-600 text-black border-blue-600' : 'bg-white text-gray-700 border-gray-300 border-[1px] border-solid hover:border-blue-400'}`}
-                onClick={() => setPaymentMethod(pm.value)}
-                type="button"
-              >
-                {pm.label}
-              </button>
-            ))}
-          </div>
+          <label className="block mb-2 font-medium">Metode Pembayaran</label>
+          <select
+            className="w-full border rounded px-3 py-2"
+            value={paymentMethod}
+            onChange={e => setPaymentMethod(e.target.value)}
+          >
+            {PAYMENT_METHODS
+              .filter(pm => !(orderType === 'pickup' && pm.value === 'cod'))
+              .map(pm => (
+                <option key={pm.value} value={pm.value}>{pm.label}</option>
+              ))}
+          </select>
         </div>
         {/* Ringkasan Order */}
         <div className="mb-6">
@@ -336,12 +498,13 @@ export default function PaymentPage() {
           </div>
         </div>
         {error && <div className="text-red-500 text-sm mb-3">{error}</div>}
+        {/* Satu tombol pembayaran utama */}
         <ButtonFilled
-          className="w-full py-3 text-lg"
-          onClick={handleConfirm}
+          className="w-full py-3 text-lg mb-2"
+          onClick={handlePay}
           disabled={loading || items.length === 0}
         >
-          {loading ? 'Memproses...' : 'Konfirmasi Pembayaran'}
+          {loading ? 'Memproses...' : 'Bayar Sekarang'}
         </ButtonFilled>
       </div>
     </div>

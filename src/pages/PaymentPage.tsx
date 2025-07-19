@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://serverc.up.railway.app';
 
 const PaymentPage = () => {
   const handleConfirm = async (orderData, orderType) => {

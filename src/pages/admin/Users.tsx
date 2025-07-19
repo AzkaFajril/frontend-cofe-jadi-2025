@@ -29,7 +29,7 @@ const Users: React.FC = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/users', {
+      const response = await fetch('https://serverc.up.railway.app/admin/users', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ const Users: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/admin/users/${userId}`, {
+        const response = await fetch(`https://serverc.up.railway.app/admin/users/${userId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -87,7 +87,7 @@ const Users: React.FC = () => {
     if (!editingUser) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/users/${editingUser._id}`, {
+      const response = await fetch(`https://serverc.up.railway.app/admin/users/${editingUser._id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

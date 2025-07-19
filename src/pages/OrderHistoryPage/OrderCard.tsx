@@ -14,9 +14,18 @@ export default function OrderCard({ order, products }: OrderCardProps) {
   let image = order.image;
   if (order.items && order.items.length > 0) {
     const firstProductId = order.items[0]?.productId;
-    const product = products.find(p => p.id === firstProductId || p._id === firstProductId);
-    image = product?.image || order.image;
+    const product = products.find(p => String(p.id) === String(firstProductId) || String(p._id) === String(firstProductId));
+    image = product?.image || order.image || '/images/empty-folder.png';
   }
+  // Mapping label delivery type
+  const DELIVERY_TYPE_LABELS: Record<string, string> = {
+    'in-place': 'In Place',
+    'IN_PLACE': 'In Place',
+    'delivery': 'Delivery',
+    'DELIVERY': 'Delivery',
+    'pickup': 'Pick Up',
+    'PICKUP': 'Pick Up',
+  };
   return (
     <Link
       to={`/orders/${order._id}`}
@@ -36,9 +45,16 @@ export default function OrderCard({ order, products }: OrderCardProps) {
         <span className="text-gray-400 text-xs font-semibold">
           {order.date}
         </span>
-        <p className="text-gray-500 text-sm font-semibold line-clamp-3">
-          {orderItemsText}
-        </p>
+        {/* Tampilkan status dan payment method */}
+        <div className="flex gap-2 text-xs mt-1">
+          <span className={`font-bold ${order.status === 'completed' ? 'text-green-600' : order.status === 'pending' ? 'text-yellow-600' : order.status === 'processing' ? 'text-blue-600' : 'text-red-600'}`}>{order.status?.toUpperCase()}</span>
+          <span className="text-gray-500">|</span>
+          <span className="font-semibold text-gray-700">{order.paymentMethod?.toUpperCase() || '-'}</span>
+          <span className="text-gray-500">|</span>
+          <span className="font-semibold">{DELIVERY_TYPE_LABELS[order.deliveryType || order.orderType || order.deliOption] || order.deliveryType || order.orderType || order.deliOption || '-'}</span>
+
+        </div>
+        
       </div>
     </Link>
   );

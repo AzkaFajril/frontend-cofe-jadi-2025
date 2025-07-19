@@ -6,7 +6,7 @@ import OrderCard from './OrderCard';
 export default function OrderHistoryPage() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:5000/products')
+    fetch('https://serverc.up.railway.app/products')
       .then(res => res.json())
       .then(setProducts);
   }, []);

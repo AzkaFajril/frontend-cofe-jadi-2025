@@ -25,6 +25,8 @@ import PrintQRTable from './hooks/provider/ModalProvider/CheckoutModal12/PrintQR
 import BuyPage from './hooks/provider/beli/BuyPage';
 import InPlaceOrders from './pages/admin/InPlaceOrders';
 import PaymentPage from './hooks/provider/ModalProvider/CheckoutModal12/PaymentPage';
+import DeliveryOrders from './pages/admin/DeliveryOrders';
+import PickupOrder from './pages/admin/PickupOrder';
 
 export default function Router() {
   return (
@@ -40,7 +42,7 @@ export default function Router() {
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         {/* 404 */}
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/PaymentPage" element={<PaymentPage />} />
+        <Route path="/paymentpage" element={<PaymentPage />} />
       </Route>
       {/* Auth */}
       <Route element={<AuthLayout />}>
@@ -62,6 +64,8 @@ export default function Router() {
         <Route path="users" element={<AdminUsers />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="/admin/inplace-orders" element={<InPlaceOrders />} />
+        <Route path="/admin/delivery-orders" element={<DeliveryOrders />} />
+        <Route path="/admin/pickup-orders" element={<PickupOrder />} />
       </Route>
     </Routes>
   );
