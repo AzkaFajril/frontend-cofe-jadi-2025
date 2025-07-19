@@ -18,7 +18,7 @@ export default function CartModal({ show, onClose }: CartModalProps) {
 
   return (
     <BaseModal show={show} onClose={() => {}} fullScreen>
-      <div className="flex flex-col h-full bg-white">
+      <div className="flex flex-col h-full bg-white" style={{ height: '100vh', paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex-shrink-0 bg-white/75 backdrop-blur-sm px-2 py-3 border-b relative">
           <h2 className="text-center text-lg font-semibold text-neutral-800">
             Shopping Cart
@@ -46,9 +46,9 @@ export default function CartModal({ show, onClose }: CartModalProps) {
             <div 
               className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch"
               style={{ 
-                height: 'calc(100vh - 120px)', 
+                height: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))', 
                 minHeight: '200px',
-                maxHeight: 'calc(100vh - 120px)'
+                maxHeight: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
               }}
             >
               <DeliOptionSwitch />
@@ -64,9 +64,9 @@ export default function CartModal({ show, onClose }: CartModalProps) {
           <div 
             className="flex-1 overflow-y-auto px-4 pb-4 -webkit-overflow-scrolling-touch"
             style={{ 
-              height: 'calc(100vh - 120px)', 
+              height: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))', 
               minHeight: '200px',
-              maxHeight: 'calc(100vh - 120px)'
+              maxHeight: 'calc(100vh - 140px - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
             }}
           >
             <EmptyCart />
