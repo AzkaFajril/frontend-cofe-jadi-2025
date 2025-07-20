@@ -51,7 +51,7 @@ export default function LoginPage() {
         scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
         callback: async (response) => {
           try {
-            const tokenResponse = await fetch('https://serverc.up.railway.app/auth/google', {
+            const tokenResponse = await fetch('http://localhost:5000/auth/google', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

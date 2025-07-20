@@ -30,7 +30,7 @@ export function getOrderList(): DeliveryOrder[] {
 
 export async function getOrderById(id: string): Promise<DeliveryOrder | null> {
   try {
-    const res = await fetch(`https://serverc.up.railway.app/api/orders/${id}`);
+    const res = await fetch(`http://localhost:5000/api/orders/${id}`);
     if (!res.ok) return null;
     const order = await res.json();
     return order;
@@ -118,7 +118,7 @@ export async function createOrder(orderData) {
     alert('Total pembayaran kosong!');
     throw new Error('totalPayment kosong');
   }
-  const res = await fetch('https://serverc.up.railway.app/api/orders', {
+  const res = await fetch('http://localhost:5000/api/orders', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...orderData, userId }),
@@ -132,7 +132,7 @@ export async function createOrder(orderData) {
 }
 
 export async function getOrderHistoryByUser(userId: string) {
-  const res = await fetch(`https://serverc.up.railway.app/api/orders/by-user?userId=${userId}`);
+  const res = await fetch(`http://localhost:5000/api/orders/by-user?userId=${userId}`);
   if (!res.ok) throw new Error('Gagal mengambil order history');
   return res.json();
 }
