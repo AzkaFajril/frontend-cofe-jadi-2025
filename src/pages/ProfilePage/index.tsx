@@ -4,7 +4,6 @@ import { useAuth } from '@/hooks/useAuth';
 import DataCards from './DataCards';
 import UserInfo from './UserInfo';
 import LogoutBtn from './LogoutBtn';
-
 export default function ProfilePage() {
   // Auth Provider
   const { user } = useAuth();
@@ -27,6 +26,7 @@ export default function ProfilePage() {
         <UserInfo user={user} />
         <LogoutBtn />
         <DataCards />
+        
       </div>
     </div>
   );

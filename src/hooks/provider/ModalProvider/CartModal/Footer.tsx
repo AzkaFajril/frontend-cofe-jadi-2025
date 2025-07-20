@@ -3,16 +3,22 @@ import ButtonFilled from '@/components/shared/button/ButtonFilled';
 import { priceWithSign } from '@/utils/helper';
 import { useNavigate } from 'react-router-dom';
 import { useModal } from '@/hooks/useModal';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Footer() {
   // Shopping Cart
   const { totalPayment } = useShoppingCart();
   const navigate = useNavigate();
   const { closeCartModal } = useModal();
+  const { user } = useAuth();
 
   const handleCheckoutClick = () => {
     closeCartModal();
-    navigate('/PaymentPage');
+    if (!user) {
+      navigate('/login');
+    } else {
+      navigate('/PaymentPage');
+    }
   };
 
   return (

@@ -35,9 +35,9 @@ export default function LogoutBtn() {
     googleLogout();
     // Clear LocalStorage Data
     logoutFromApp();
-    clearAddress();
     removeAllOrders();
-    window.location.href = '/login'; // atau '/'
+    // Redirect ke halaman utama (PASTIKAN INI PALING BAWAH)
+    window.location.href = '/';
   };
 
   return (
