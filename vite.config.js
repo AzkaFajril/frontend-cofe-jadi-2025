@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/payment': 'http://localhost:5000'
+      '/payment': 'https://serverc.up.railway.app'
     }
   }
 })

@@ -40,7 +40,7 @@ const PickupOrder: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('https://serverc.up.railway.app/api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -72,7 +72,7 @@ const PickupOrder: React.FC = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/orders/${order._id}/status`, {
+      const response = await fetch(`https://serverc.up.railway.app/admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -102,7 +102,7 @@ const PickupOrder: React.FC = () => {
     }
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/orders/${order.orderId || order._id}/status`, {
+      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -132,7 +132,7 @@ const PickupOrder: React.FC = () => {
         body.status = newStatus;
       }
       
-      const response = await fetch(`http://localhost:5000/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -171,13 +171,13 @@ const PickupOrder: React.FC = () => {
       let body: any = {};
 
       if (editType === 'status') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
         body = { status: newStatus };
       } else if (editType === 'payment') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
         body = { paymentStatus: newPaymentStatus };
       } else if (editType === 'pesanan') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
         body = { statusPesanan: newPesananStatus };
       }
 
@@ -252,14 +252,6 @@ const PickupOrder: React.FC = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-end mb-4">
-        <button
-          className="px-4 py-2 bg-green-600 text-black rounded shadow hover:bg-green-700"
-          onClick={handleDownloadExcel}
-        >
-          Download Excel
-        </button>
-      </div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Pickup Orders</h1>
       <div className="mb-4 flex items-center gap-4">
         <div className="flex items-center gap-2">

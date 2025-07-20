@@ -98,7 +98,7 @@ const InPlaceOrders: React.FC = () => {
         body.status = newStatus;
       }
       
-      const response = await fetch(`http://localhost:5000/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -126,13 +126,13 @@ const InPlaceOrders: React.FC = () => {
       let body: any = {};
 
       if (editType === 'status') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
         body = { status: newStatus };
       } else if (editType === 'payment') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
         body = { paymentStatus: newPaymentStatus };
       } else if (editType === 'pesanan') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
         body = { statusPesanan: newPesananStatus };
       }
 
@@ -219,7 +219,7 @@ const InPlaceOrders: React.FC = () => {
     <div className="p-6">
       <div className="flex justify-end mb-4">
         <button
-          className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700"
+          className="px-4 py-2 bg-green-600 text-black rounded shadow hover:bg-green-700"
           onClick={handleDownloadExcel}
         >
           Download Excel
