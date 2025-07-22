@@ -12,6 +12,7 @@ interface ProductSizeSwitchProps {
 }
 
 export default function ProductSizeSwitch({ selectedSize, setSelectedSize, sizes }: ProductSizeSwitchProps) {
+  const selectedSizeObj = sizes.find(s => s.name?.toLowerCase() === selectedSize?.toLowerCase());
   return (
     <div>
       <Title6 className="mb-2">Size</Title6>
@@ -36,6 +37,11 @@ export default function ProductSizeSwitch({ selectedSize, setSelectedSize, sizes
           ))}
         </div>
       </RadioGroup>
+      {selectedSizeObj && (
+        <div className="mt-2 text-sm text-gray-600">
+          <b>Harga:</b> Rp {selectedSizeObj.price.toLocaleString('id-ID')}
+        </div>
+      )}
     </div>
   );
 }

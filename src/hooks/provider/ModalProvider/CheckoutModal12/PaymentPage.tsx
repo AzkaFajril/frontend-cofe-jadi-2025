@@ -1,4 +1,4 @@
-    import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import ButtonFilled from '@/components/shared/button/ButtonFilled';
 import Title2 from '@/components/shared/typo/Title2';
@@ -84,6 +84,15 @@ export default function PaymentPage() {
           setAddressLoading(false);
         })
         .catch(() => setAddressLoading(false));
+    }
+  }, [orderType]);
+
+  // Otomatis tampilkan QR Scanner saat orderType in-place
+  useEffect(() => {
+    if (orderType === 'in-place') {
+      setShowQR(true);
+    } else {
+      setShowQR(false);
     }
   }, [orderType]);
 
@@ -294,11 +303,10 @@ export default function PaymentPage() {
       window.snap.pay(data.token, {
         onSuccess: () => {
           clearCart();
-          window.location.href = '/orders';
+          window.location.href = '/orders'; // hanya redirect jika sukses
         },
         onPending: () => {
-          clearCart();
-          window.location.href = '/orders';
+          setSuccess(true); // tampilkan pesan sukses sementara, tidak redirect dan tidak clearCart
         },
         onError: () => setError('Pembayaran gagal!'),
         onClose: () => setError('Kamu menutup popup tanpa menyelesaikan pembayaran'),
@@ -357,15 +365,7 @@ export default function PaymentPage() {
         {orderType === 'in-place' && (
           <div className="mb-6">
             <Title3 className="mb-2">Nomor Meja</Title3>
-            
-            {/* Hanya scan QR, tidak ada input manual */}
-            <ButtonFilled
-              className="mt-2"
-              onClick={() => setShowQR(!showQR)}
-              type="button"
-            >
-              {showQR ? 'Tutup QR Scanner' : 'Scan QR Meja'}
-            </ButtonFilled>
+            {/* QR Scanner langsung tampil */}
             {showQR && (
               <div className="mt-4">
                 <TableQRScanner onScan={(val) => { setTableNumber(val); setShowQR(false); }} />

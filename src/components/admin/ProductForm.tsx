@@ -49,7 +49,7 @@ const submitProduct = async (productData: any) => {
 
     // Lakukan POST ke endpoint admin/products
     const response = await axios.post(
-      'https://serverc.up.railway.app/admin/products',
+      'http://localhost:5000/admin/products',
       productData,
       {
         headers: {
@@ -161,7 +161,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onCancel, initialDa
         if (isEditing && id) {
           // EDIT: PUT ke endpoint update
           response = await axios.put(
-            `https://serverc.up.railway.app/admin/products/${id}`,
+            `http://localhost:5000/admin/products/${id}`,
             formData,
             {
               headers: {
@@ -173,7 +173,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onCancel, initialDa
         } else {
           // ADD: POST ke endpoint tambah
           response = await axios.post(
-            'https://serverc.up.railway.app/admin/products',
+            'http://localhost:5000/admin/products',
             formData,
             {
               headers: {

@@ -32,7 +32,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, currentImage }
       formData.append('image', file);
 
       const token = localStorage.getItem('token');
-      const response = await fetch('https://serverc.up.railway.app/upload/image', {
+      const response = await fetch('http://localhost:5000/upload/image', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

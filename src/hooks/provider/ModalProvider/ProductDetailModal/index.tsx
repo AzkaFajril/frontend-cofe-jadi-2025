@@ -1,5 +1,5 @@
 import BaseModal from '@/components/shared/modal/BaseModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CoffeeProduct, CoffeeSize } from '@/types';
 import Footer from './Footer';
 import ProductSizeSwitch from './ProductSizeSwitch';
@@ -15,9 +15,23 @@ export default function ProductDetailModal({
   product,
   onClose,
 }: ProductDetailModalProps) {
-  const [selectedSize, setSelectedSize] = useState(
-    product?.sizes?.[0]?.name || ''
-  );
+  const [selectedSize, setSelectedSize] = useState('');
+
+  useEffect(() => {
+    if (product?.sizes && product.sizes.length > 0) {
+      const small = product.sizes.find(s => s.name?.toLowerCase() === 'small');
+      if (small) setSelectedSize(small.name);
+      else {
+        const cheapest = product.sizes.reduce((min, curr) =>
+          curr.price < min.price ? curr : min
+        );
+        setSelectedSize(cheapest.name);
+      }
+    } else {
+      setSelectedSize('');
+    }
+  }, [product]);
+
   return (
     <BaseModal show={!!product} onClose={onClose}>
       {product && (

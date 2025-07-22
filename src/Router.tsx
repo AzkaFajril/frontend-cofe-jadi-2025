@@ -28,6 +28,7 @@ import InPlaceOrders from './pages/admin/InPlaceOrders';
 import PaymentPage from './hooks/provider/ModalProvider/CheckoutModal12/PaymentPage';
 import DeliveryOrders from './pages/admin/DeliveryOrders';
 import PickupOrder from './pages/admin/PickupOrder';
+import PendingPayment from './pages/OrderHistoryPage/PenddingPayment';
 
 export default function Router() {
   return (
@@ -45,6 +46,7 @@ export default function Router() {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/PaymentPage" element={<PaymentPage />} />
         <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="/PendingPayment" element={<PendingPayment />} />
       </Route>
       {/* Auth */}
       <Route element={<AuthLayout />}>
