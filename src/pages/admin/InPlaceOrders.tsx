@@ -21,6 +21,7 @@ const InPlaceOrders: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'processing' | 'completed' | 'cancelled'>('all');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'online' | 'cod'>('all');
+  const [searchOrderId, setSearchOrderId] = useState('');
 
   // Modal edit statusPesanan
   const [showEditPesananModal, setShowEditPesananModal] = useState(false);
@@ -33,7 +34,7 @@ const InPlaceOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('https://serverc.up.railway.app/api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -67,7 +68,7 @@ const InPlaceOrders: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/orders/${order._id}/status`, {
+      const response = await fetch(`https://serverc.up.railway.app/admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -98,7 +99,7 @@ const InPlaceOrders: React.FC = () => {
         body.status = newStatus;
       }
       
-      const response = await fetch(`http://localhost:5000/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -126,13 +127,13 @@ const InPlaceOrders: React.FC = () => {
       let body: any = {};
 
       if (editType === 'status') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
         body = { status: newStatus };
       } else if (editType === 'payment') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
         body = { paymentStatus: newPaymentStatus };
       } else if (editType === 'pesanan') {
-        endpoint = `http://localhost:5000/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
+        endpoint = `https://serverc.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
         body = { statusPesanan: newPesananStatus };
       }
 
@@ -228,6 +229,7 @@ const InPlaceOrders: React.FC = () => {
       <h1 className="text-3xl font-bold text-gray-900 mb-8">In-Place Orders</h1>
       
       <div className="mb-4 flex items-center gap-4">
+       
         <div className="flex items-center gap-2">
           <label className="font-medium">Filter Payment:</label>
           <select
@@ -253,6 +255,16 @@ const InPlaceOrders: React.FC = () => {
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
         </select>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="font-medium">Cari Order ID:</label>
+          <input
+            type="text"
+            placeholder="12345"
+            value={searchOrderId}
+            onChange={e => setSearchOrderId(e.target.value)}
+            className="border px-2 py-1 rounded"
+          />
         </div>
       </div>
       <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
@@ -338,7 +350,11 @@ const InPlaceOrders: React.FC = () => {
                     return (order.paymentMethod || '').toLowerCase() === 'cod';
                   }
                   return true;
-                });
+                })
+                .filter(order =>
+                  searchOrderId === '' ||
+                  (order.orderId || order._id || '').toLowerCase().includes(searchOrderId.toLowerCase())
+                );
               if (filteredOrders.length === 0) {
                 return (
                   <tr>

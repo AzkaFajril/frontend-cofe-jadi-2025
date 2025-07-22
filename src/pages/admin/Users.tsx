@@ -21,6 +21,7 @@ const Users: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [searchUser, setSearchUser] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -29,7 +30,7 @@ const Users: React.FC = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/users', {
+      const response = await fetch('https://serverc.up.railway.app/admin/users', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -61,7 +62,7 @@ const Users: React.FC = () => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/admin/users/${userId}`, {
+        const response = await fetch(`https://serverc.up.railway.app/admin/users/${userId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -87,7 +88,7 @@ const Users: React.FC = () => {
     if (!editingUser) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/users/${editingUser._id}`, {
+      const response = await fetch(`https://serverc.up.railway.app/admin/users/${editingUser._id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -179,6 +180,17 @@ const Users: React.FC = () => {
           <h3 className="text-lg font-semibold text-gray-900">All Users</h3>
         </div>
         
+        <div className="mb-4 flex items-center gap-2">
+          <label className="font-medium">Cari User:</label>
+          <input
+            type="text"
+            placeholder="Nama atau Email"
+            value={searchUser}
+            onChange={e => setSearchUser(e.target.value)}
+            className="border px-2 py-1 rounded"
+          />
+        </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -201,53 +213,59 @@ const Users: React.FC = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user, index) => (
-                <tr key={user._id || `user-${index}`} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={user.picture || 'https://via.placeholder.com/40'}
-                        alt={user.name || 'User'}
-                      />
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{user.name || 'Unknown User'}</div>
+              {users
+                .filter(user =>
+                  searchUser === '' ||
+                  user.name?.toLowerCase().includes(searchUser.toLowerCase()) ||
+                  user.email?.toLowerCase().includes(searchUser.toLowerCase())
+                )
+                .map((user, index) => (
+                  <tr key={user._id || `user-${index}`} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={user.picture || 'https://via.placeholder.com/40'}
+                          alt={user.name || 'User'}
+                        />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{user.name || 'Unknown User'}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{user.email || 'No email'}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                      user.role === 'admin' 
-                        ? 'bg-red-100 text-red-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
-                      {user.role || 'user'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown date'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEditUser(user._id || '')}
-                        className="text-blue-600 hover:text-blue-900 p-1"
-                      >
-                        <PencilIcon className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteUser(user._id || '')}
-                        className="text-red-600 hover:text-red-900 p-1"
-                      >
-                        <TrashIcon className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{user.email || 'No email'}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        user.role === 'admin' 
+                          ? 'bg-red-100 text-red-800' 
+                          : 'bg-green-100 text-green-800'
+                      }`}>
+                        {user.role || 'user'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Unknown date'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => handleEditUser(user._id || '')}
+                          className="text-blue-600 hover:text-blue-900 p-1"
+                        >
+                          <PencilIcon className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser(user._id || '')}
+                          className="text-red-600 hover:text-red-900 p-1"
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

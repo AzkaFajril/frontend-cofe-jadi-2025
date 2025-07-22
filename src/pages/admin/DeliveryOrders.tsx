@@ -31,6 +31,7 @@ const DeliveryOrders: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<'all' | 'processing' | 'completed' | 'cancelled'>('all');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'online' | 'cod'>('all');
+  const [searchOrderId, setSearchOrderId] = useState('');
 
   // State untuk modal edit statusPesanan
   const [showEditPesananModal, setShowEditPesananModal] = useState(false);
@@ -43,7 +44,7 @@ const DeliveryOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('https://serverc.up.railway.app/api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -76,7 +77,7 @@ const DeliveryOrders: React.FC = () => {
     const fetchOrders = async () => {
       try {
         // Ganti base URL sesuai kebutuhan (bisa pakai proxy di vite.config.js)
-        const response = await fetch('http://localhost:5000/api/orders', {
+        const response = await fetch('https://serverc.up.railway.app/api/orders', {
           headers: { 'Content-Type': 'application/json' }
         });
         if (response.ok) {
@@ -95,7 +96,7 @@ const DeliveryOrders: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/admin/orders/${order._id}/status`, {
+      const response = await fetch(`https://serverc.up.railway.app/admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -121,7 +122,7 @@ const DeliveryOrders: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const body: any = { statusPesanan: newStatusPesanan };
-      const response = await fetch(`http://localhost:5000/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -241,6 +242,16 @@ const DeliveryOrders: React.FC = () => {
             <option value="cod">COD</option>
           </select>
         </div>
+        <div className="flex items-center gap-2">
+          <label className="font-medium">Cari Order ID:</label>
+          <input
+            type="text"
+            placeholder="12345"
+            value={searchOrderId}
+            onChange={e => setSearchOrderId(e.target.value)}
+            className="border px-2 py-1 rounded"
+          />
+        </div>
       </div>
       <div className="overflow-x-auto rounded-lg shadow-lg bg-white">
         <table className="min-w-full divide-y divide-gray-200">
@@ -356,6 +367,10 @@ const DeliveryOrders: React.FC = () => {
                 }
                 return true;
               })
+              .filter(order =>
+                searchOrderId === '' ||
+                (order.orderId || order._id || '').toLowerCase().includes(searchOrderId.toLowerCase())
+              )
               .map((order, idx) => (
               <tr
                 key={order._id}
@@ -363,7 +378,7 @@ const DeliveryOrders: React.FC = () => {
                 style={{ animationDelay: `${idx * 60}ms` }}
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                  #{order.orderId || order._id?.slice(-6)}
+                  {order.orderId || order._id?.slice(-6)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                   {order.customer?.name || '-'}
