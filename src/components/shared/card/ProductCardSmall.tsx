@@ -16,6 +16,20 @@ export default function ProductCardSmall({ coffee }: ProductCardProps) {
     showProductModal(coffee);
   };
 
+  // Logic harga sesuai size
+  const sizes = (coffee as any).sizes as { name: string; price: number }[] | undefined;
+  let displayPrice = coffee.price;
+  if (sizes && sizes.length > 0) {
+    // Urutkan prioritas: Small > Medium > Large > size pertama
+    const small = sizes.find(s => s.name?.toLowerCase() === 'small');
+    const medium = sizes.find(s => s.name?.toLowerCase() === 'medium');
+    const large = sizes.find(s => s.name?.toLowerCase() === 'large');
+    if (small) displayPrice = small.price;
+    else if (medium) displayPrice = medium.price;
+    else if (large) displayPrice = large.price;
+    else displayPrice = sizes[0].price;
+  }
+
   return (
     <button
       onClick={handleClick}
@@ -31,7 +45,7 @@ export default function ProductCardSmall({ coffee }: ProductCardProps) {
             {coffee.displayName}
           </p>
           <p className="font-semibold text-teal-900">
-            {priceWithSign(coffee.price)}
+            {formatRupiahTanpaDesimal(displayPrice)}
           </p>
       </div>
       <div className="absolute bottom-2 right-2">

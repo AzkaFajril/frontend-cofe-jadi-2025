@@ -33,6 +33,7 @@ export interface CoffeeProduct {
   description: string;
   image: string;
   category?: string;
+  sizes?: { name: string; price: number }[]; // Tambahan agar produk bisa punya banyak size
 }
 
 export interface CartItem {
@@ -87,6 +88,8 @@ export interface DeliveryOrder {
   image: string;
   orderType?: string;
   tableNumber?: string;
+  statusPesanan?: string; // Tambahan agar bisa akses status pesanan dari API
+  deliveryType?: string; // Tambahan agar bisa akses deliveryType dari API
 }
 
 export type HeroIcon = React.ComponentType<

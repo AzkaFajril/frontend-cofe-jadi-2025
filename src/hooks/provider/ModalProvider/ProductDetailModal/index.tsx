@@ -15,7 +15,9 @@ export default function ProductDetailModal({
   product,
   onClose,
 }: ProductDetailModalProps) {
-  const [selectedSize, setSelectedSize] = useState<CoffeeSize>(CoffeeSize.SMALL);
+  const [selectedSize, setSelectedSize] = useState(
+    product?.sizes?.[0]?.name || ''
+  );
   return (
     <BaseModal show={!!product} onClose={onClose}>
       {product && (
@@ -24,7 +26,11 @@ export default function ProductDetailModal({
           <div className="p-4 pb-8">
             <ProductInfo product={product} selectedSize={selectedSize} />
             <hr className="my-4" />
-            <ProductSizeSwitch selectedSize={selectedSize} setSelectedSize={setSelectedSize} />
+            <ProductSizeSwitch
+              selectedSize={selectedSize}
+              setSelectedSize={setSelectedSize}
+              sizes={product.sizes || []}
+            />
           </div>
           <Footer product={product} onClose={onClose} selectedSize={selectedSize} />
         </>

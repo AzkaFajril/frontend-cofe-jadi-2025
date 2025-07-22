@@ -8,19 +8,20 @@ import { coffeeSizeOptions } from '@/constants/constants';
 interface ProductSizeSwitchProps {
   selectedSize: string;
   setSelectedSize: (size: string) => void;
+  sizes: { name: string; price: number }[];
 }
 
-export default function ProductSizeSwitch({ selectedSize, setSelectedSize }: ProductSizeSwitchProps) {
+export default function ProductSizeSwitch({ selectedSize, setSelectedSize, sizes }: ProductSizeSwitchProps) {
   return (
     <div>
       <Title6 className="mb-2">Size</Title6>
       <RadioGroup value={selectedSize} onChange={setSelectedSize}>
         <RadioGroup.Label className="sr-only">Coffee size</RadioGroup.Label>
         <div className="flex flex-row gap-4 ">
-          {coffeeSizeOptions.map((option) => (
+          {sizes.map((option) => (
             <RadioGroup.Option
-              key={option.label}
-              value={option.value}
+              key={option.name}
+              value={option.name}
               className={({ checked }) =>
                 classNames(
                   'flex items-center justify-center px-4 py-1 border rounded-xl',
@@ -30,7 +31,7 @@ export default function ProductSizeSwitch({ selectedSize, setSelectedSize }: Pro
                 )
               }
             >
-              {option.label}
+              {option.name}
             </RadioGroup.Option>
           ))}
         </div>

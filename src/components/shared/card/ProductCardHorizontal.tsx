@@ -1,7 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 import { useModal } from '@/hooks/useModal';
-import { classNames, priceWithSign, formattedPrice, formatRupiahTanpaDesimal } from '@/utils/helper';
+import { classNames, priceWithSign, formatRupiahTanpaDesimal } from '@/utils/helper';
 import { ProductCardProps } from './type';
 
 
@@ -18,8 +18,18 @@ export default function ProductCardHorizontal({ coffee }: ProductCardProps) {
   };
 
   const coffeeWithSizes = coffee as any;
-const smallPrice = (coffeeWithSizes.sizes?.find?.((s: any) => s.name?.toLowerCase?.() === 'small')?.price) ?? coffee.price;
-const formattedPrice = formatRupiahTanpaDesimal(smallPrice);
+  const sizes = coffeeWithSizes.sizes as { name: string; price: number }[] | undefined;
+  let displayPrice = coffee.price;
+  if (sizes && sizes.length > 0) {
+    const small = sizes.find(s => s.name?.toLowerCase() === 'small');
+    const medium = sizes.find(s => s.name?.toLowerCase() === 'medium');
+    const large = sizes.find(s => s.name?.toLowerCase() === 'large');
+    if (small) displayPrice = small.price;
+    else if (medium) displayPrice = medium.price;
+    else if (large) displayPrice = large.price;
+    else displayPrice = sizes[0].price;
+  }
+  const formattedPrice = formatRupiahTanpaDesimal(displayPrice);
   return (
     <button
       onClick={handleClick}

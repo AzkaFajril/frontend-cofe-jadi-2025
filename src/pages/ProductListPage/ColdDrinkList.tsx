@@ -3,7 +3,7 @@ import ProductsByCategory from './ProductsByCategory';
 
 export default function ColdDrinkList() {
   // Product Provider
-  const { icedCoffees } = useProduct();
+  const { coldDrinks } = useProduct();
 
-  return <ProductsByCategory title="Cold Drink" coffees={icedCoffees} />;
+  return <ProductsByCategory title="Cold Drink" coffees={coldDrinks} />;
 }

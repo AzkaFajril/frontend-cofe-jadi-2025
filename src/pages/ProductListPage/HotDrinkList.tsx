@@ -3,7 +3,7 @@ import ProductsByCategory from './ProductsByCategory';
 
 export default function HotDrinkList() {
   // Product Provider
-  const { hotCoffees } = useProduct();
+  const { hotDrinks } = useProduct();
 
-  return <ProductsByCategory title="Hot Drink" coffees={hotCoffees} />;
+  return <ProductsByCategory title="Hot Drink" coffees={hotDrinks} />;
 }

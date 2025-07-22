@@ -7,6 +7,7 @@ interface ProductContextProps {
   hotDrinks: CoffeeProduct[];
   desserts: CoffeeProduct[];
   food: CoffeeProduct[];
+  ColdDrinkList: CoffeeProduct[];
 }
 
 const ProductContext = createContext<ProductContextProps | null>(null);

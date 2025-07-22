@@ -1,6 +1,8 @@
 import SearchProduct from './SearchProduct';
 import HotDrinkList from './HotDrinkList';
 import ColdDrinkList from './ColdDrinkList';
+import DessertsList from './desserts';
+import FoodList from './Food';
 
 export default function ProductListPage() {
   return (
@@ -8,6 +10,8 @@ export default function ProductListPage() {
       <SearchProduct />
       <HotDrinkList />
       <ColdDrinkList />
+      <FoodList />
+      <DessertsList />
     </div>
   );
 }

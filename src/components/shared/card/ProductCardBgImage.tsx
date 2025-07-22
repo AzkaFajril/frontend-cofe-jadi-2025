@@ -13,8 +13,13 @@ export default function ProductCardBgImage({ coffee }: ProductCardProps) {
   };
   // Gunakan any agar tidak error linter, tambahkan komentar untuk future type safety
   const coffeeWithSizes = coffee as any;
-  const smallPrice = (coffeeWithSizes.sizes?.find?.((s: any) => s.name?.toLowerCase?.() === 'small')?.price) ?? coffee.price;
-  const formattedPrice = formatRupiahTanpaDesimal(smallPrice);
+  const sizes = coffeeWithSizes.sizes as { name: string; price: number }[] | undefined;
+  let displayPrice = coffee.price;
+  if (sizes && sizes.length > 0) {
+    const small = sizes.find(s => s.name?.toLowerCase() === 'small');
+    displayPrice = small ? small.price : sizes[0].price;
+  }
+  const formattedPrice = formatRupiahTanpaDesimal(displayPrice);
 
   return (
     <button

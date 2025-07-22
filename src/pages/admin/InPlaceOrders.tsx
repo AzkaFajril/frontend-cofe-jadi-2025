@@ -19,7 +19,7 @@ const statusTips: Record<string, string> = {
 const InPlaceOrders: React.FC = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState<'all' | 'processing' | 'completed' | 'cancelled'>('processing');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'processing' | 'completed' | 'cancelled'>('all');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'online' | 'cod'>('all');
 
   // Modal edit statusPesanan
@@ -226,28 +226,7 @@ const InPlaceOrders: React.FC = () => {
         </button>
       </div>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">In-Place Orders</h1>
-      <div className="mb-6 p-4 rounded-lg border border-yellow-400 border-solid bg-yellow-50 flex flex-col gap-1 shadow-sm max-w-xl">
-        <div className="flex items-center gap-2">
-          <span className="w-5 h-5 bg-yellow-400 text-black rounded-full flex items-center justify-center text-sm font-bold">!</span>
-          <span className="font-semibold text-yellow-900">Pending:</span>
-          <span className="ml-2 text-yellow-900">Belum payment</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-5 h-5 bg-yellow-400 text-black rounded-full flex items-center justify-center text-sm font-bold">!</span>
-          <span className="font-semibold text-yellow-900">Processing:</span>
-          <span className="ml-2 text-yellow-900">Sudah payment</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-5 h-5 bg-yellow-400 text-black rounded-full flex items-center justify-center text-sm font-bold">!</span>
-          <span className="font-semibold text-yellow-900">Completed:</span>
-          <span className="ml-2 text-yellow-900">Makanan / Minuman sudah di antar / di kirim</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-5 h-5 bg-yellow-400 text-black rounded-full flex items-center justify-center text-sm font-bold">!</span>
-          <span className="font-semibold text-yellow-900">Cancelled:</span>
-          <span className="ml-2 text-yellow-900">Order dibatalkan</span>
-        </div>
-      </div>
+      
       <div className="mb-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
           <label className="font-medium">Filter Payment:</label>

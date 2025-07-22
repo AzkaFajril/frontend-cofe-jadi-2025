@@ -47,9 +47,12 @@ export default function OrderCard({ order, products }: OrderCardProps) {
         </span>
         {/* Tampilkan status dan payment method */}
         <div className="flex gap-2 text-xs mt-1">
-          <span className={`font-bold ${order.status === 'completed' ? 'text-green-600' : order.status === 'pending' ? 'text-yellow-600' : order.status === 'processing' ? 'text-blue-600' : 'text-red-600'}`}>{order.status?.toUpperCase()}</span>
+          <span className={`font-bold ${order.statusPesanan === 'sudah_dikirim' ? 'text-green-600' : order.statusPesanan === 'belum_dikirim' ? 'text-yellow-600' : order.statusPesanan === 'sedang_diproses' ? 'text-blue-600' : 'text-red-600'}`}>{order.statusPesanan?.toUpperCase()}</span>
           <span className="text-gray-500">|</span>
           <span className="font-semibold text-gray-700">{order.paymentMethod?.toUpperCase() || '-'}</span>
+          <span className="text-gray-500">|</span>
+
+          <span className={`font-bold ${order.status === 'completed' ? 'text-green-600' : order.status === 'pending' ? 'text-yellow-600' : order.status === 'processing' ? 'text-blue-600' : 'text-red-600'}`}>{order.status?.toUpperCase()}</span>
           <span className="text-gray-500">|</span>
           <span className="font-semibold">{DELIVERY_TYPE_LABELS[order.deliveryType || order.orderType || order.deliOption] || order.deliveryType || order.orderType || order.deliOption || '-'}</span>
 

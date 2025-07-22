@@ -1,7 +1,7 @@
 import React from 'react';
 import CounterInputSm from '@/components/shared/CounterInputSm';
 import { CartItem } from '@/types';
-import { priceWithSign, formatRupiahTanpaDesimal } from '@/utils/helper';
+import { formatRupiahTanpaDesimal } from '@/utils/helper';
 import { useShoppingCart } from '@/hooks/useShoppingCart';
 
 interface CartItemCardProps {
@@ -10,13 +10,11 @@ interface CartItemCardProps {
 }
 
 const CartItemCard: React.FC<CartItemCardProps> = ({ cartItem, index }) => {
-  // Shopping Cart
   const { updateQuantity, removeFromCart } = useShoppingCart();
-  // Local Variable
   const { product, quantity, size } = cartItem;
-  // Cari harga sesuai size jika ada
-  const productWithSizes = product as any;
-  const sizes = productWithSizes.sizes as { name: string; price: number }[] | undefined;
+
+  // Cari harga sesuai size
+  const sizes = (product as any).sizes as { name: string; price: number }[] | undefined;
   let price = product.price;
   if (sizes && sizes.length > 0 && size) {
     const sizeObj = sizes.find(s => s.name?.toLowerCase() === size?.toLowerCase());

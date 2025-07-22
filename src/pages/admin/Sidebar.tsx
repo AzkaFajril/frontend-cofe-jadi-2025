@@ -40,7 +40,7 @@ const Sidebar: React.FC = () => {
     
     <div className="flex flex-col h-full">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Coffee Shop Admin</h1>
+        <a href='/' className="text-2xl font-bold">Coffee Shop Admin</a>
       </div>
       <nav className="space-y-2">
         {menuItems.map((item) => {

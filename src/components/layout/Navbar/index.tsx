@@ -56,6 +56,12 @@ export default function Navbar() {
             >
               Orders
             </Link>
+            <Link
+              to="/products"
+              className="hidden sm:block text-gray-500 hover:text-primary font-semibold hover:underline"
+            >
+              All products
+            </Link>
           </div>
           <div className="flex flex-row items-center space-x-4 w-auto">
             <Link
