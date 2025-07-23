@@ -20,7 +20,7 @@ const UploadMenu = () => {
     if (image) formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:5000/products/upload', formData, {
+      await axios.post('https://serverc.up.railway.app/products/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       alert('Menu berhasil diupload!');

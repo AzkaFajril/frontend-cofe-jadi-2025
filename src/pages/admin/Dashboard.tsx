@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
   const fetchDashboardStats = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/dashboard', {
+      const response = await fetch('https://serverc.up.railway.app/admin/dashboard', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -69,7 +69,7 @@ const Dashboard: React.FC = () => {
   const handleAddProduct = async (formData: any) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/admin/products', {
+      const response = await fetch('https://serverc.up.railway.app/admin/products', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
