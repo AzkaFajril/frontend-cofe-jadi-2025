@@ -5,7 +5,7 @@ import { UserAddress } from '@/types';
 import UserAddressContext from '../context/UserAddressContext';
 
 const keyName = 'coffee-shop-auth-user-address';
-const API_URL = 'https://serverc.up.railway.app';
+const API_URL = 'https://server-production-0205.up.railway.app/';
 
 type UserAddressProviderProps = {
   children: JSX.Element | JSX.Element[];

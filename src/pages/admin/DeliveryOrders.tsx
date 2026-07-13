@@ -44,7 +44,7 @@ const DeliveryOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('https://serverc.up.railway.app/api/orders', {
+      const response = await fetch('https://server-production-0205.up.railway.app//api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -77,7 +77,7 @@ const DeliveryOrders: React.FC = () => {
     const fetchOrders = async () => {
       try {
         // Ganti base URL sesuai kebutuhan (bisa pakai proxy di vite.config.js)
-        const response = await fetch('https://serverc.up.railway.app/api/orders', {
+        const response = await fetch('https://server-production-0205.up.railway.app//api/orders', {
           headers: { 'Content-Type': 'application/json' }
         });
         if (response.ok) {
@@ -96,7 +96,7 @@ const DeliveryOrders: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://serverc.up.railway.app/admin/orders/${order._id}/status`, {
+      const response = await fetch(`https://server-production-0205.up.railway.app//admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -122,7 +122,7 @@ const DeliveryOrders: React.FC = () => {
     try {
       const token = localStorage.getItem('token');
       const body: any = { statusPesanan: newStatusPesanan };
-      const response = await fetch(`https://serverc.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://server-production-0205.up.railway.app//api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

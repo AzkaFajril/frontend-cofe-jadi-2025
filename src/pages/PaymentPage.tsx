@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
 
-const API_URL = 'https://serverc.up.railway.app';
+const API_URL = 'https://server-production-0205.up.railway.app/';
 
 const PaymentPage = () => {
-  const handleConfirm = async (orderData, orderType) => {
+  
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const clearCart = () => {
+    // Implement cart clearing logic or wire to your cart context/store
+  };
+
+  const handleConfirm = async (
+    orderData: Record<string, unknown>,
+    _orderType: string
+  ) => {
     setLoading(true);
     const endpoint = `${API_URL}/api/orders`;
 
@@ -20,7 +32,7 @@ const PaymentPage = () => {
         const err = await res.json();
         setError(err.message || 'Gagal menyimpan order!');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Gagal menyimpan order!');
     }
     setLoading(false);
@@ -29,6 +41,9 @@ const PaymentPage = () => {
   return (
     <div>
       {/* Payment page content */}
+      {loading && <p>Memproses pembayaran...</p>}
+      {success && <p>Pembayaran berhasil!</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };

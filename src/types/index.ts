@@ -34,6 +34,7 @@ export interface CoffeeProduct {
   image: string;
   category?: string;
   sizes?: { name: string; price: number }[]; // Tambahan agar produk bisa punya banyak size
+  isAvailable?: boolean; // Tambahan agar bisa filter produk yang available
 }
 
 export interface CartItem {
