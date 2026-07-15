@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { CoffeeProduct } from '@/types';
 
-const API_URL = 'https://server-production-0205.up.railway.app//products';
+const API_URL = 'https://server-production-0205.up.railway.app/products';
 
 export async function getAllCoffee(): Promise<CoffeeProduct[]> {
-  const res = await fetch('https://server-production-0205.up.railway.app//products');
+  const res = await fetch('https://server-production-0205.up.railway.app/products');
   return res.json();
 }
 
@@ -15,7 +15,7 @@ export async function getCoffeeById(id: string): Promise<CoffeeProduct> {
 
 export const createProduct = async (productData: any, token: string) => {
   const response = await axios.post(
-    'https://server-production-0205.up.railway.app//admin/products',
+    'https://server-production-0205.up.railway.app/admin/products',
     productData,
     {
       headers: {
@@ -28,7 +28,7 @@ export const createProduct = async (productData: any, token: string) => {
 };
 
 export async function fetchProducts() {
-  const res = await axios.get('https://server-production-0205.up.railway.app//product');
+  const res = await axios.get('https://server-production-0205.up.railway.app/product');
   // Pastikan setiap produk punya field id yang unik
   return res.data.map((item: any) => ({
     ...item,

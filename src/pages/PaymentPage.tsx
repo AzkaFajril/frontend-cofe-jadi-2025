@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_URL = 'https://server-production-0205.up.railway.app/';
+const API_URL = 'https://server-production-0205.up.railway.app';
 
 const PaymentPage = () => {
   

@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/payment': 'https://server-production-0205.up.railway.app/'
+      '/payment': 'https://server-production-0205.up.railway.app'
     }
   }
 })

@@ -34,7 +34,7 @@ const InPlaceOrders: React.FC = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('https://server-production-0205.up.railway.app//api/orders', {
+      const response = await fetch('https://server-production-0205.up.railway.app/api/orders', {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -68,7 +68,7 @@ const InPlaceOrders: React.FC = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://server-production-0205.up.railway.app//admin/orders/${order._id}/status`, {
+      const response = await fetch(`https://server-production-0205.up.railway.app/admin/orders/${order._id}/status`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -99,7 +99,7 @@ const InPlaceOrders: React.FC = () => {
         body.status = newStatus;
       }
       
-      const response = await fetch(`https://server-production-0205.up.railway.app//api/orders/${order.orderId || order._id}/control-statuspesanan`, {
+      const response = await fetch(`https://server-production-0205.up.railway.app/api/orders/${order.orderId || order._id}/control-statuspesanan`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -127,13 +127,13 @@ const InPlaceOrders: React.FC = () => {
       let body: any = {};
 
       if (editType === 'status') {
-        endpoint = `https://server-production-0205.up.railway.app//api/orders/${editingOrder.orderId || editingOrder._id}/status`;
+        endpoint = `https://server-production-0205.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/status`;
         body = { status: newStatus };
       } else if (editType === 'payment') {
-        endpoint = `https://server-production-0205.up.railway.app//api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
+        endpoint = `https://server-production-0205.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/payment-status`;
         body = { paymentStatus: newPaymentStatus };
       } else if (editType === 'pesanan') {
-        endpoint = `https://server-production-0205.up.railway.app//api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
+        endpoint = `https://server-production-0205.up.railway.app/api/orders/${editingOrder.orderId || editingOrder._id}/control-statuspesanan`;
         body = { statusPesanan: newPesananStatus };
       }
 

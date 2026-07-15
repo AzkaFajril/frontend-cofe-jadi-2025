@@ -66,7 +66,7 @@ export default function ScanTableQR({ tableNumber, setTableNumber }: ScanTableQR
       image: items[0]?.product?.image || '',
     };
     try {
-      const res = await fetch('https://server-production-0205.up.railway.app//api/orders', {
+      const res = await fetch('https://server-production-0205.up.railway.app/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
